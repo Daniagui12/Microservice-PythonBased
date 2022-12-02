@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="content">
+    <div class="">
+        <div class="page-header-title">
+            <h4 class="page-title">Manejador de solicitudes</h4>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="page-content-wrapper">
+        <div class="container">
+            <!-- Content page -->
+            <form method = "get">
+                {{myFilter.form.as_p}}
+                <button type="submit">Search</button>
+            </form>
+                
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    
+                    <!-- List of uploaded documents -->
+                    {% if documents %}
+                        All documents in the database:
+                        <ul>
+                            {% for solicitud in documents %}
+                                <li><a href="{{ solicitud.documentoCliente.url }}">{{ solicitud.documentoCliente.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No documents.</p>
+                    {% endif %}
+            
+                    <!-- Upload form. Note enctype attribute! -->
+                    <form action="{% url "document-view" %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ message }}
+                        <p>{{ form.non_field_errors }}</p>
+            
+                        <p>{{ form.documentoCliente.label_tag }} {{ form.documentoCliente.help_text }}</p>
+            
+                        <p>
+                            {{ form.documentoCliente.errors }}
+                            {{ form.documentoCliente }}
+                        </p>
+                        
+                        <p>{{ form.cedula.label_tag }} {{ form.cedula.help_text }}</p>
+                        <p>{{ form.cedula }}</p>
+            
+                        <p><input type="submit" value="Upload"/></p>
+                    </form>
+                    
+                    <div style="text-align:center;">
+                        <button type="button" class="btn btn-primary waves-effect waves-light"
+                                onClick=" window.location.href='/' ">
+                            Back
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
